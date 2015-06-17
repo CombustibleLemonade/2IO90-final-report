@@ -1,0 +1,66 @@
+\documentclass[crop=false,a4paper,oneside,11pt]{standalone}
+\usepackage{a4wide,graphicx,fancyhdr,amsmath,amssymb,float,graphicx,color,geometry,xcolor,titlesec,colortbl,tabu,color}
+\usepackage[parfill]{parskip}
+\usepackage[nodayofweek]{datetime}
+\usepackage{listings}
+%----------------------- Macros and Definitions --------------------------
+
+%fast change of things
+\newcommand{\mysubject}{2IO70 DBL Embedded Systems}
+\newcommand{\myassignment}{Group 12}
+
+%\definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+%\definecolor{namecolor}{cmyk}{1,.50,0,.10}
+
+
+\setlength\headheight{20pt}
+\addtolength\topmargin{-10pt}
+\addtolength\footskip{20pt}
+
+% Define light and dark Microsoft blue colours
+\definecolor{MSBlue}{rgb}{.204,.353,.541}
+\definecolor{MSLightBlue}{rgb}{.31,.506,.741}
+\arrayrulecolor{MSLightBlue}
+
+% Set formats for each heading level
+
+\titleformat*{\section}{\Large\bfseries\sffamily\color{MSBlue}}
+\titleformat*{\subsection}{\large\bfseries\sffamily\color{MSLightBlue}}
+
+%date format
+\newdateformat{mydate}{\monthname[\THEMONTH] \THEYEAR}
+
+\fancypagestyle{plain}{%
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[CO] {\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+
+%--------------------------------- Text ----------------------------------
+\setcounter{secnumdepth}{0}
+\begin{document}
+
+\section{References}
+$[1]$ A. Wolff. \emph{Automated Label Placement in Theory and Practice}. PhD thesis Freie Univeristät Berlin, May 1999. Section 3.2.
+
+$[2]$ J. Christensen, J. Marks and S. Shieber. An Empirical Study of Algorithms for Point-Feature Label Placement. In \emph{ACM Transactions on Graphics}, Volume 14, Issue 3, pages 203-232 July 1995.
+
+$[3]$ A. Wolff. \emph{The Map-Labeling Bibliography}. URL: http://i11www.iti.uni-karlsruhe.de/~awolff/map-labeling/bibliography/, accessed April 27th 2015.
+
+$[4]$ E. Imhof. Positioning Names on Maps. In \emph{The American Cartographer}, Volume 2, Issue 2, pages 128-144, 1975.
+
+$[5]$ A. Cook and C. Jones. A Prolog Rule-Based System for Cartographic Name Placement. In \emph{Computer Graphics Forum}, Volume 9, Issue 2, pages 109-126, 1990.
+
+$[6]$ G. Raidl. A Genetic Algorithm for Labeling Point Features. In \emph{Proc. The International Conference on Imaging Science, Systems, and Technology}. Pages 189-196, 1998.
+
+$[7]$ K. Mote. Fast Point-Feature Label Placement for Dynamic Visualizations. In \emph{Information Visualization}. Volume 6, Issue 4, pages 249-260, December 2007.
+
+$[8]$ K. Been, E. Daiches and C. Yap. Dynamic Map Labeling. In \emph{Proc. IEEE Transactions on Visualization and Computer Graphics}. Volume 12, Issue 5, pages 773-780, September 2006.
+\end{document}

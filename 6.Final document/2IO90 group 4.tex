@@ -1,0 +1,54 @@
+\documentclass[a4paper,oneside,11pt]{article}
+\usepackage{a4wide,graphicx,fancyhdr,amsmath,amssymb,float,graphicx,color,geometry,xcolor,titlesec,colortbl,tabu,standalone,import,listings}
+\usepackage[parfill]{parskip}
+\usepackage[nodayofweek]{datetime}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%----------------------- Macros and Definitions --------------------------
+
+\newcommand{\maxsize}[1]{\begin{quotation} {\sl \noindent Maximum size: #1.} \end{quotation}}
+
+\newcommand{\ml}[1]{\begin{quotation} {\sl \noindent For the map-labeling problem: #1} \end{quotation}}
+
+\newcommand{\example}[1]{\begin{quotation} {\sl \noindent Example: #1} \end{quotation}}
+
+%%
+% Theorem-Like Environments
+%
+\newtheorem{defin}{Definition}
+  \newenvironment{mydefinition}{\begin{defin} \sl}{\end{defin}}
+\newtheorem{theo}[defin]{Theorem}
+  \newenvironment{mytheorem}{\begin{theo} \sl}{\end{theo}}
+\newtheorem{lem}[defin]{Lemma}
+  \newenvironment{lemma}{\begin{lem} \sl}{\end{lem}}
+\newtheorem{coro}[defin]{Corollary}
+  \newenvironment{corollary}{\begin{coro} \sl}{\end{coro}}
+\newtheorem{obse}[defin]{Observation}
+  \newenvironment{observation}{\begin{obse} \sl}{\end{obse}}
+
+\newenvironment{proof}{\emph{Proof.}}{\hfill $\Box$ \medskip\\}
+
+
+
+\title{Point Labeling Problem}
+\author{J.J.~Traas \and L.~Smolders \and Y.~Lin \and G.~Park \and M.M.~G\"{o}sgens \and J.~Heemstra}
+\date{\today}
+
+%------------------------------ Style -------------------------------
+
+
+\begin{document}
+\maketitle
+
+\subimport{../1.Introduction/}{Introduction}
+
+\subimport{../2.TheAlgorithms/}{TheAlgorithms}
+
+\subimport{../3.ExperimentalEvaluation/}{ExperimentalEvaluation}
+
+\subimport{../4.ConcludingRemarks/}{ConcludingRemarks}
+
+\subimport{../5.References/}{References}
+
+\end{document}
