@@ -48,7 +48,14 @@
 
 \section{Experimental Evaluation}
 
-We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with an Intel i7-3630QM CPU @ 2.40GHz and 8,00 GB RAM. To measure the amount of time and algorithm we start a timer in the code just before the part we want to test and we stop the timer right after the part stops.
+We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with an Intel i7-3630QM CPU @ 2.40GHz and 8,00 GB RAM. To measure the amount of time and algorithm we start a timer in the code just before the part we want to test and we stop the timer right after the part stops. For testing the 2-position, 4-position and 1-slider algorithms we generated test cases with 5 different distributions. These distributions are:
+\begin{enumerate}
+    \item Uniform. Points are randomly placed on a 10000 by 10000 plane.
+    \item Clustered. Points are placed around 20 randomly chosen points.
+    \item H Clustered. Points are placed around 10 randomly chosen y-coordinates.
+    \item V Clustered. Points are placed around 10 randomly chosen x-coordinates.
+    \item Bounded. Points are randomly placed on a 1000 by 1000 plane.
+\end{enumerate}
 
 \subsection{2-position}
 \subsubsection{Results}
