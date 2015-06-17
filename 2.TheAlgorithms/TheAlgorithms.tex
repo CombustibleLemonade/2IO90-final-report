@@ -53,23 +53,33 @@ All our algorithms use a quad tree for quick finding of points in an interval, t
 
 \subsection{Quadtree}
 Since advanced label-placing algorithms have a tendency of requesting information about what labels exist in a certain area, a quadtree can help speed up those algorithms. A quadtree has four children per node and each node of the tree stores information about a certain square-shaped area it patrols. All labels stored in a node have their origin point in the area of that node. Furthermore, the four child nodes are the subdivision of its parent node. This means that nodes in a certain area can be easily found by traversing the tree.\\
-A quadtree implementation is being worked on, but is not yet finished. None of the previously described algorithms use the quadtree functionality yet.
+
+Here I will show how a quadtree can be used to find labels in a certain area.
 
 \begin{algorithm}[H]
-\caption{Your Algorithm Here}
+\caption{Find labels in an area}
 \begin{algorithmic}[1]
-\Procedure{1slider}{$points[], labelwidth, labelheight$}
-\State $r\gets a\bmod b$
-\While{$r\not=0$}\Comment{Your comment here}
-\State $a\gets b$
-\State $b\gets r$
-\State $r\gets a\bmod b$
-\EndWhile
-\State \textbf{return} $b$\Comment{Your comment here}
+\Procedure{LabelsInArea}{$Area\ a$}
+\State $out = \emptyset$
+\If{$this.children.size > 0$}\Comment{Here we traverse the tree}
+\For{$c \in this.children$}
+\If{$Overlap(a, c.area)$}
+\State $out.add(c.LabelsInArea())$
+\EndIf
+\EndFor
+\Else\Comment{Here we return the right labels}
+\For{$l \in this.labels$}
+\If{$a.contains(l.pos)$}
+\State $out.add(l)$
+\EndIf
+\EndFor
+\EndIf
+\State \textbf{return} $out$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
+When dealing with a balanced quadtree, the worst-case running time is $O(n)$, which is when the labelsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and since the 
 
 \subsection{2-position model and 4-position model}
 For the 2-position model and the 4-position model we use a very simple approach. We will first our algorithm. While doing this we will also derive the theoretical running times. Then we will prove that it does not place overlapping labels. After that we will prove this approach applies the rules L1, L2 and L3 (from Automated Label Placement in Theory and Practice, by Alexander Wolff) correctly.
