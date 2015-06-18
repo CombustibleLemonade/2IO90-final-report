@@ -52,10 +52,36 @@ In this section we will describe the algorithms we use for each of the placement
 All our algorithms use a quadtree to quickly find all points in an interval. This will be described first. Furthermore, the algorithms for the 2pos model and the 4pos model are very similar, these will be discussed together. After that, we will describe the algorithm for the 1slider model.
 
 \subsection{Quadtree}
+<<<<<<< HEAD
 Since advanced label-placing algorithms have a tendency of requesting information about what labels exist in a certain area, a quadtree can help speed up those algorithms. A quadtree has four children per node and each node of the tree stores information about a certain square-shaped area it patrols. All labels stored in a node have their origin point in the area of that node. Furthermore, the four child nodes are the subdivision of its parent node. This means that nodes in a certain area can be easily found by traversing the tree.\\
 
 Here we will show how a quadtree can be used to find labels in a certain area.
+=======
+Since advanced label-placing algorithms have a tendency of requesting information about what labels exist in a certain area, a quadtree can help speed up those algorithms. A quadtree is defined as a tree, with a node having four children recursively. Each node of the tree stores information about a certain square-shaped area it bounds, including an array of points which have their location in the area of that node. Nodes which contain points are leaves of the tree. The four child nodes are the subdivision of its parent node. This means that nodes in a certain area can be easily found by traversing the tree.\\
+Since every point is distinct, and there are only $10000 * 10000$ possible placements, we can reasonably assume the tree is balanced.\\
+\begin{algorithm}[H]
+\caption{Add label to the quadtree}
+\begin{algorithmic}[1]
+\Procedure{AddLabel}{$Label\ l$}
+\If{$this.children.size > 0$}\Comment{Here we traverse the tree}
+\For{$c \in this.children$}
+\If{$Overlap(l.pos, c.area)$}
+\State $c.AddLabel(l)$
+\EndIf
+\EndFor
+\Else\Comment{Here add the label to the node}
+\State $this.add(l)$
+\If{$this.labels.size>maxNodeSize$}
+\State $this.split()$ \Comment{Split the node into 4 subnodes}
+\EndIf
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+In a balanced quadtree the maximum depth is in $O(\log{n})$, which means our algorithm also runs in $O(\log{n}))$
+>>>>>>> origin/master
 
+Here I will show how a quadtree can be used to find labels in a certain area.\\
 \begin{algorithm}[H]
 \caption{Find labels in an area}
 \begin{algorithmic}[1]
@@ -79,7 +105,7 @@ Here we will show how a quadtree can be used to find labels in a certain area.
 \end{algorithmic}
 \end{algorithm}
 
-When dealing with a balanced quadtree, the worst-case running time is $O(n)$, which is when the labelsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and since the 
+When dealing with a balanced quadtree with $n$ labels, the worst-case running time is $O(n)$, which is when the labelsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and there are $n$ labels, therefore the running time is in $O(n)$.
 
 \subsection{2-position model and 4-position model}
 For the 2-position model and the 4-position model we use a very simple approach. We will first our algorithm. While doing this we will also derive the theoretical running times. Then we will prove that it does not place overlapping labels. After that we will prove this approach applies the rules L1, L2 and L3 (from Automated Label Placement in Theory and Practice, by Alexander Wolff) correctly.
@@ -114,7 +140,7 @@ Below you can see the pseudo-code for the algorithms. First we will show the mai
 \end{algorithmic}
 \end{algorithm}
 \textbf{Running time}\\
-The first line takes $\Theta(1)$ of course, the second line will take $\Theta(n\log n)$ since it inserts (insertion takes $\Theta(\log n)$) $n$ points. For the third line it has to give $n$ points $k$ candidates. Giving a point a candidate takes $\Theta(1)$. In the case of the 4-position and the 2-position model, $k$ equals 4 and 2 respectively. So this line will take $\Theta(n)$. Now there is the for-loop. This loops over all $\Theta(n)$ candidates and gives it its collisions. The latter takes $\Theta(n)$ as described below. Now we create a MinHeap, creating a Heap takes $\Theta(n)$. Now there is a while-loop. In every cycle it gets a maximum and places a label. When it places a label, it eliminates at least all the candidates of one point. So this loop iterates at most $n$ times. In this loop, we get the minimum ($\Theta(\log n)$ for a MinHeap) and place it ($\Theta(n^2)$ as described below). The return statement takes $\Theta(1)$. So the whole 2-position and 4-position algorithm takes $\Theta(1)+\Theta(n\log n)+\Theta(n)+\Theta(n)*\Theta(n)+\Theta(n)+\Theta(n)*(\Theta(1)+\Theta(n^2))=\Theta(n^3)$. 
+The first line takes $\Theta(1)$ of course, the second line will take $\Theta(n\log n)$ since it inserts (insertion takes $\Theta(\log n)$) $n$ points. For the third line it has to give $n$ points $k$ candidates. Giving a point a candidate takes $\Theta(1)$. In the case of the 4-position and the 2-position model, $k$ equals 4 and 2 respectively. So this line will take $\Theta(n)$. Now there is the for-loop. This loops over all $\Theta(n)$ candidates and gives it its collisions. The latter takes $\Theta(n)$ as described below. Now we create a MinHeap, creating a Heap takes $\Theta(n)$. After that, there is a while-loop. Inside this while-loop we place candidates untill the heap is empty. Placing candidates will result in at least one elimination. Every candidate can only be eliminated once and the elimination takes $\Theta(n)$ as described later on. Concluding, the whole algorithm takes $\Theta(1)+\Theta(n\log n)+\Theta(n)+\Theta(n)*\Theta(n)+\Theta(n)+\Theta(n)*\Theta(n)=\Theta(n^2)$.
 
 \begin{algorithm}[H]
 \caption{The algorithm that returns the colliding candidates of a candidate $c$}
@@ -134,7 +160,7 @@ The first line takes $\Theta(1)$ of course, the second line will take $\Theta(n\
 \end{algorithmic}
 \end{algorithm}
 \textbf{Running time}\\
-The first statement takes $\Theta(1)$. The second statement uses the LabelsInArea function, this has running time in the order of $\log n$ plus the number of points in the area. The number of points is $\Theta(n)$ (with large enough labels and dense enough clusters, every point can have a candidate intersecting $c$). So this results in $\Theta(n)$. Then there is the loop going through all these $\Theta(n)$ points. Inside this loop it checks for each candidate of the point (this number of candidates is $\Theta(1)$) whether it intersects with $c$, this takes $\Theta(1)$. Adding it also takes $\Theta(1)$. So concluding: The running time of this procedure is $\Theta(1)+\Theta(n)+\Theta(n)*\Theta(1)*(\Theta(1)+\Theta(1))=\Theta(n)$.
+The first statement takes $\Theta(1)$. The second statement uses the LabelsInArea function, this has running time $\Theta(n)$. So this results in $\Theta(n)$. Then there is the loop going through all these $\Theta(n)$ points. Inside this loop it checks for each candidate of the point (this number of candidates is $\Theta(1)$) whether it intersects with $c$, this takes $\Theta(1)$. Adding it also takes $\Theta(1)$. So concluding: The running time of this procedure is $\Theta(1)+\Theta(n)+\Theta(n)*\Theta(1)*(\Theta(1)+\Theta(1))=\Theta(n)$.
 
 \begin{algorithm}[H]
 \caption{The algorithm that places a candidate $c$}
@@ -150,7 +176,9 @@ The first statement takes $\Theta(1)$. The second statement uses the LabelsInAre
 \end{algorithmic}
 \end{algorithm}
 \textbf{Running time}\\
-There are two loops in this procedure. The first loops over all the candidates of the point of $c$. So 4 for the 4-position model and 2 for the 2-position model. $\Theta(1)$ either way. In this loop it performs the Eliminate function, this will take $\Theta(n)$ as you can see below. The second loop loops over all the candidates that collide with $c$, these are at most $k*n$ in the worst case. So $4n$ for the 4-position model and $2n$ for the 2-position model. $\Theta(n)$ in both cases. Inside this loop, we perform Eliminate again, this again takes $\Theta(n)$ every time. So the total running time of this procedure will be $\Theta(1)*\Theta(n)+\Theta(n)*\Theta(n)=\Theta(n^2)$
+There are two loops in this procedure. The first loops over all the candidates $C_p$ of the point $p$ of $c$. So 4 for the 4-position model and 2 for the 2-position model. $\Theta(1)$ either way. In this loop it performs the Eliminate function, this will take $\Theta(\log n + n^*)$ ($n^*$ is the number of collisions of the candidate we are eliminating) as you can see below. The second loop loops over all the candidates in the CollisionList $L_c$ of $c$, we will call the number of colliding candidates $n_c$. Inside this loop, we perform Eliminate again, this again takes $\Theta(\log n + n^*)$ every time. So we get:
+$$\sum\limits_{i=1}^k(\log n + n_{C_p[i]})+\sum\limits_{i=1}^{n_c}(\log n + n_{L_c[i]})=\Theta((k+n_c)(\log n))+n_{cc}$$
+Here $n_{cc}$ denotes the amount of candidates that collide with a candidate that collide with $c$. Unfortunately, $n_{cc}$ is $\Theta(n^2)$ is the worst case, $n_{L_c[i]}=\Theta(n)$ and $n_c=\Theta(n)$ as well. Fortunately, $k=\Theta(1)$ in the case of the 4pos and 2pos model. So we end up with $\Theta(n^2)$.
 
 \begin{algorithm}[H]
 \caption{The algorithm that eliminates a candidate $c$}
@@ -164,16 +192,16 @@ There are two loops in this procedure. The first loops over all the candidates o
 \end{algorithmic}
 \end{algorithm}
 \textbf{Running time}\\
-As you can see there is one loop in this procedure. This loop loops over all collisions of $c$, the number of collisions is $\Theta(n)$. Removing the candidate from the CollisionList takes $\Theta(1)$. Furthermore, removing a node from a MinHeap takes $\Theta(\log n)$ of course. Concluding: The whole procedure takes $\Theta(n)*\Theta(1)+\Theta(\log n)=\Theta(n)$
+As you can see there is one loop in this procedure. This loop loops over all collisions of $c$, we will call this $n_c$. Removing the candidate from the CollisionList takes $\Theta(1)$. Furthermore, removing a node from a MinHeap takes $\Theta(\log n)$ of course. Concluding: The whole procedure takes $\Theta(n_c)*\Theta(1)+\Theta(\log n)=\Theta(\log n + n_c)$
 
 \subsubsection{Proof of no overlapping labels}
 We will prove the correctness (no intersections) of our algorithms using a loop invariant over the while-loop in the main algorithm:
 
-\textbf{Loop invariant:} $S$ does not contain overlapping candidates. Futhermore, there is no candidate $c_s\in S$ that collides with a candidate $c_h$ in the heap.
+\textbf{Loop invariant:} $S$ does not contain overlapping candidates. Furthermore, there is no candidate $c_s\in S$ that collides with a candidate $c_h$ in the heap.
 
 \textbf{Initialization:} $S$ is empty initially, so there are no two candidates that overlap each other and there is also no candidate in $S$ that overlaps any of the candidates in the heap.
 
-\textbf{Maintenance:} In every iteration of the while-loop, exactly one candidate $c_m$ is added to $S$. Because of the loop invariant, it has no intersections with any of the candidates that were already in $S$. This proves the maintenance of the first part of the loop invariant. When placing the candidate, we eliminate itself and all its collisions. Calling the Eliminate function on a candidate $c$ will remove $c$ from the MinHeap. So all candidates in the Heap that collide with $c_m$ will be removed from the Heap. This together with the second part of the loop invariant (no candidate $c_s\in S$ collides with a candidate $c_h$ in the heap) proves the maintaince of the second part of the loop invariant.
+\textbf{Maintenance:} In every iteration of the while-loop, exactly one candidate $c_m$ is added to $S$. Because of the loop invariant, it has no intersections with any of the candidates that were already in $S$. This proves the maintenance of the first part of the loop invariant. When placing the candidate, we eliminate itself and all its collisions. Calling the Eliminate function on a candidate $c$ will remove $c$ from the MinHeap. So all candidates in the Heap that collide with $c_m$ will be removed from the Heap. This together with the second part of the loop invariant (no candidate $c_s\in S$ collides with a candidate $c_h$ in the heap) proves the maintenance of the second part of the loop invariant.
 
 \textbf{Termination:} When the loop is finished, our loop invariant proves that there are no intersecting candidates in $S$.
 
@@ -191,7 +219,8 @@ L2 applies if some $p$ has a candidate $p_i$ that only overlaps some $q_k$, and 
 candidate $q_j$ ($j \neq k$) that is only overlapped by $p_l$ ($l \neq i$), then add $p_i$
 and $q_j$ to the solution and eliminate all other candidates of $p$ and $q$.\\
 \\
-
+We will prove that if L2 applies for some points $p$ and $q$, our algorithm will label both $p$ and $q$. We will again prove this by contradiction. We assume that either $p$ is not labeled or that $q$ is not labeled (or both). Without loss of generallity, we can assume that $p$ is not labeled. This means that $p_i$ is removed from the heap. Since $p$ has not been placed, a candidate overlapping $p_i$ must have been placed. Since $q_k$ is the only candidate overlapping $p_i$, $q_k$ must have been placed. Since $q_j$ has one collision and we place the minimum, $q_k$ must also have one collision. Now all other candidates of $q$ will be eliminated. 
+\\
 \textbf{Rule L3}\\
 
 \subsubsection{Additional guarantees}
@@ -200,7 +229,7 @@ and $q_j$ to the solution and eliminate all other candidates of $p$ and $q$.\\
 \subsection{1-slider model}
 % new stuff about L1:
 \subsubsection{Summary}
-The 1-slider algorithm also uses a quadtree and a heap. It firstly initializes this quadtree, filling it with all of the points in the input. Then, each of the points will be assigned a so-called $bounding\ box$, which represent all potential label placements. These $bounding \ boxes$ will be given collision values by the quadtree. After this, a maxheap of points is initialized, using the amount of collisions the $bounding \ box$ of the point has with other $bounding \ boxes$ as keys. Now the program will enter a loop. In this loop, we find a solution for all of the points which have not been $discarded$. Firstly, we have to re-assign collision values for all of the remaining points. Secondly, we apply rule L1 and L2, which have been explained earlier. Thirdly, we finish the solution by executing a greedy algorithm on the remaining points. Lastly, we check whether the solution we found this iteration is better than the best solution so far. If it is better, we replace the best solution with this new solution. Now we delete the point of which the $bounding \ box$ has the most collisions from the heap and mark the corresponding point in the quadtree as $discarded$. This loop is repeated until the heap is empty, we have found a solution which places labels on all of the points, or when four and a half minutes have passed. In the end, we report the best solution found. A detailed explanation of all subalgorithms and concepts is given below. \\
+The 1-slider algorithm also uses a quadtree and a heap. It firstly initializes this quadtree, filling it with all of the points in the input. Then, each of the points will be assigned a so-called $bounding\ box$, which represent all potential label placements. These $bounding \ boxes$ will be given collision values by the quadtree. After this, a maxheap of points is initialized, using the amount of collisions the $bounding \ box$ of the point has with other $bounding \ boxes$ as keys. Now the program will enter a loop. In this loop, we find a solution for all of the points which have not been $discarded$. Firstly, we have to re-assign collision values for all of the remaining points. Secondly, we apply rule L1 and L2, which have been explained earlier. Thirdly, we finish the solution by executing a greedy algorithm on the remaining points. Lastly, we check whether the solution we found this iteration is better than the best solution so far. If it is better, we replace the best solution with this new solution. Now we delete the point of which the $bounding \ box$ has the most collisions from the heap and mark the corresponding point in the quadtree as $discarded$. This loop is repeated until the heap is empty, we have found a solution which places labels on all of the points, or when four and a half minutes have passed. In the end, we report the best solution found. A detailed explanation of all sub-algorithms and concepts is given below. \\
  \begin{algorithm}[H]
 \caption{1slider algorithm}
 \begin{algorithmic}[1]

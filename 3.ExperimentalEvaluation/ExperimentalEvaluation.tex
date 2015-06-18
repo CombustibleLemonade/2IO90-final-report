@@ -48,23 +48,43 @@
 
 \section{Experimental Evaluation}
 
-We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with an Intel i7-3630QM CPU @ 2.40GHz and 8,00 GB RAM. To measure the amount of time and algorithm we start a timer in the code just before the part we want to test and we stop the timer right after the part stops.
+We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with an Intel i7-3630QM CPU @ 2.40GHz and 8,00 GB RAM. To measure the amount of time and algorithm we start a timer in the code just before the part we want to test and we stop the timer right after the part stops. For testing the 2-position, 4-position and 1-slider algorithms we generated test cases with $5$ different distributions. These distributions are:
+\begin{enumerate}
+    \item Uniform. Points are randomly placed on a $10000$ by $10000$ plane.
+    \item Clustered. Points are placed around $20$ randomly chosen points.
+    \item H Clustered. Points are placed around $10$ randomly chosen $y$-coordinates.
+    \item V Clustered. Points are placed around $10$ randomly chosen $x$-coordinates.
+    \item Bounded. Points are randomly placed on a $1000$ by $1000$ plane.
+\end{enumerate}
+We have $500$ test cases in total, $100$ of each different distribution with $5$ different label sizes. The label sizes are, $100$ by $100$, $100$ by $500$, $500$ by $100$, $1000$ by $1000$ and $5000$ by $5000$.
 
 \subsection{2-position}
 \subsubsection{Results}
-The running time of the 2-position algorithm can be seen in figure ...
+The algorithm of 2-position model is explained in detail in section ... As a recap, the algorithm has two phases: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. The following picture shows an example of the labels placement in one of the cases (Red points mean that no label could be placed).
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[scale = 0.5]{2pos_example.JPG}\\
+  \caption{A graphic showing an example of the 2-position algorithm}
+ \end{figure}
+
+The running time of the 2-position algorithm can be seen in the following figure.
 \begin{figure}[h!]
  \centering
   \includegraphics[scale = 0.5]{2PosRunningTime.png}\\
-  \caption{A graphic showing the percentage of labels placed by the 4-position algorithm}
+  \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
  \end{figure}
 
-The percentage of labels placed by the 2-position algorithm can be seen in figure \begin{figure}[h!]
+The following graph shows the percentage of label placed by 2-position algorithm. It also shows five different types of distribution.
+\begin{figure}[h!]
  \centering
   \includegraphics[scale = 0.5]{2PosLabelsPlaced.png}\\
-  \caption{A graphic showing the percentage of labels placed by the 4-position algorithm}
+  \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
  \end{figure}
 \subsubsection{Discussion}
+As we explained in the previous section the theoretical running time of the 2-position algorithm is $O(n^2)$. In figure ..., it shows the running time of the different test cases. In most cases the running time is quite low and close to the minimal running time. This is because the amount of collisions of the candidates is low, so it will not take much time to map the collisions and it will take less time to place the labels. There are some cases that have higher running time than the others. And we can see from the figure that the practical worst case running time are close to the theoretical running time $O(n^2)$ as we explained before. \\
+The running time of the worst cases of each distribution suddenly drops when the number of points reaches a specific amount. This is because in these cases, there are too many collisions. If we use the regular algorithm, the running time will become really high so it's not efficient. So in that case, we use a greedy algorithm to place the labels.\\
+Other than running time, we also look at the amount of labels placed by our algorithm. As we can see from figure ..., when the amount of points are small, the algorithm gives a solution with a high percentage of placed labels. When the amount of points become higher, the percentage of placed labels becomes lower. This is pretty normal since the labels have the same height and the same width for the same type of distribution but with different amount of points.\\
 
 \subsection{4-position}
 \subsubsection{Results}
