@@ -56,18 +56,18 @@ All our algorithms use a quadtree to quickly find all points in an interval. Thi
 Since advanced label-placing algorithms have a tendency of requesting information about what labels exist in a certain area, a quadtree can help speed up those algorithms. A quadtree is defined as a tree, with a node having four children recursively. Each node of the tree stores information about a certain square-shaped area it bounds, including an array of points which have their location in the area of that node. Nodes which contain points are leaves of the tree. The four child nodes are the subdivision of its parent node. This means that nodes in a certain area can be easily found by traversing the tree.\\
 Since every point is distinct, and there are only $10000 * 10000$ possible placements, we can reasonably assume the tree is balanced.\\
 \begin{algorithm}[H]
-\caption{Add label to the quadtree}
+\caption{Add point to the quadtree}
 \begin{algorithmic}[1]
-\Procedure{AddLabel}{$Label\ l$}
+\Procedure{AddPoint}{$Point\ p$}
 \If{$this.children.size > 0$}\Comment{Here we traverse the tree}
 \For{$c \in this.children$}
-\If{$Overlap(l.pos, c.area)$}
-\State $c.AddLabel(l)$
+\If{$Overlap(p, c.area)$}
+\State $c.AddPoint(p)$
 \EndIf
 \EndFor
-\Else\Comment{Here add the label to the node}
-\State $this.add(l)$
-\If{$this.labels.size>maxNodeSize$}
+\Else\Comment{Here add the point to the node}
+\State $this.add(p)$
+\If{$this.points.size>maxNodeSize$}
 \State $this.split()$ \Comment{Split the node into 4 subnodes}
 \EndIf
 \EndIf
@@ -76,22 +76,22 @@ Since every point is distinct, and there are only $10000 * 10000$ possible place
 \end{algorithm}
 In a balanced quadtree the maximum depth is in $O(\log{n})$, which means our algorithm also runs in $O(\log{n}))$
 
-
 Here we will show how a quadtree can be used to find labels in a certain area.\\
+
 \begin{algorithm}[H]
-\caption{Find labels in an area}
+\caption{Find points in an area}
 \begin{algorithmic}[1]
-\Procedure{LabelsInArea}{$Area\ a$}
+\Procedure{PointsInArea}{$Area\ a$}
 \State $out = \emptyset$
 \If{$this.children.size > 0$}\Comment{Here we traverse the tree}
 \For{$c \in this.children$}
 \If{$Overlap(a, c.area)$}
-\State $out.add(c.LabelsInArea())$
+\State $out.add(c.PointsInArea())$
 \EndIf
 \EndFor
 \Else\Comment{Here we return the right labels}
-\For{$l \in this.labels$}
-\If{$a.contains(l.pos)$}
+\For{$p \in this.points$}
+\If{$a.contains(l)$}
 \State $out.add(l)$
 \EndIf
 \EndFor
@@ -101,7 +101,7 @@ Here we will show how a quadtree can be used to find labels in a certain area.\\
 \end{algorithmic}
 \end{algorithm}
 
-When dealing with a balanced quadtree with $n$ labels, the worst-case running time is $O(n)$, which is when the labelsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and there are $n$ labels, therefore the running time is in $O(n)$.
+When dealing with a balanced quadtree with $n$ points, the worst-case running time is $O(n)$, which is when the PointsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and there are $n$ points, therefore the running time is in $O(n)$.
 
 \subsection{2-position model and 4-position model}
 For the 2-position model and the 4-position model we use a very simple approach. We will first our algorithm. While doing this we will also derive the theoretical running times. Then we will prove that it does not place overlapping labels. After that we will prove this approach applies the rules L1, L2 and L3 (from Automated Label Placement in Theory and Practice, by Alexander Wolff) correctly.
