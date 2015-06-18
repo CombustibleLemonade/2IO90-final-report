@@ -48,7 +48,7 @@
 \begin{document}
 
 \begin{abstract}
-The readability of maps is related to the amount of overlaps text labels have. Point-feature label placement (we use PFLP in this paper) is the problem of placing text labels next to features on a map with the goal of maximising legibility, where labels can still overlap. In our paper we focus on the PFLP problem to maximise a subset of labels that are placed without any overlap. We use the 2-position, 4-position and 1-slider models to place labels that have a fixed height and width and present algorithms for these models. In our paper we present algorithms for the 2-position, 4-position and 1-slider models with running times $O(n^2)$, $O(n^2)$ and ... respectively.
+The readability of maps is related to the amount of overlaps text labels have. Point-feature label placement (we use PFLP in this paper) is the problem of placing text labels next to features on a map with the goal of maximising legibility, where labels can still overlap. In our paper we focus on the PFLP problem to maximise a subset of labels that are placed without any overlap. We use the 2-position, 4-position and 1-slider models to place labels that have a fixed height and width. In our paper we present algorithms for the 2-position, 4-position and 1-slider models with running times $O(n^2)$, $O(n^2)$ and $O(n^3)$ respectively.
 \end{abstract}
 
 \section{Introduction}
@@ -69,6 +69,8 @@ From the earliest maps in ancient times to Google Maps today, labeling points wi
  \end{figure}
  \end{enumerate}
 
-In section ... we describe the algorithm we have created for the 2-position model which has a running time of $O(n^2)$. In section ... we describe the algorithm we have created for the 4-position model which has a running time of $O(n^2)$. In section ... we describe the algorithm we have created for the 1-slider model which has a running time of ...
+In section ... we describe the algorithm we have created for the 2-position model which has a running time of $O(n^2)$. In section ... we describe the algorithm we have created for the 4-position model which has a running time of $O(n^2)$. In section ... we describe the algorithm we have created for the 1-slider model which has a running time of $O(n^3)$.
+
+In all our algorithms we need to be able to detect collisions.
 
 \end{document}
