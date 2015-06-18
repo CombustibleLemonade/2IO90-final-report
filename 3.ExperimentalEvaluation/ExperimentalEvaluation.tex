@@ -59,23 +59,23 @@ We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with
 
 \subsection{2-position}
 \subsubsection{Results}
-The algorithm of 2-position model has been explained in the previous section. As a recap this algorithm has two phase: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. For the experimental evaluation of the 2-position algorithm we use $2500$ different test cases with $500$ cases for each distribution.
+The algorithm of 2-position model has been explained in the previous section. As a recap, this algorithm has two phase: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. For the experimental evaluation of the 2-position algorithm we use $2500$ different test cases with $500$ cases for each distribution.
 
 \begin{figure}[h!]
  \centering
-  \includegraphics[scale = 0.5]{2PosRunningTime.JPG}\\
+  \includegraphics[scale = 0.5]{2PosRunningTime.png}\\
   \caption{A graphic showing the running time of the 2-position algorithm}
  \end{figure}
 
 \begin{figure}[h!]
  \centering
-  \includegraphics[scale = 0.5]{2PosLabelsPlaced.JPG}\\
+  \includegraphics[scale = 0.5]{2PosLabelsPlaced.png}\\
   \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
  \end{figure}
 \subsubsection{Discussion}
 As we explained in the previous section the theoretical running time of the 2-position algorithm is $O(n^2)$. In figure ..., it shows the running time of $2500$ different cases. You can see most of the cases are quite low in the running time and also close to their best cases. This is because the amount of collisions of the candidates is small, so it will not take much time to map the collisions and it will take less time to place the labels. There are some cases that have higher running time than the others. And we can see from the figure that the practical worst case running time are close to the theoretical running time $O(n^2)$ as we explained before. \\
 The worst cases of each distribution suddenly drops when the number of points reaches a specific amount. This is because in these cases, there are too many collisions. If we use the regular algorithm, the running time will become really high so it's not efficient. So in that case, we use greedy algorithm to place the labels. The running time will become lower and the solution is as optimal when using the regular algorithm since there are a lot of collisions.\\
-Other than running time, we also look at the results of our algorithm. As we can see from figure ..., when the amount of points are small, the algorithm gives solutions with high percentage of placed labels. When the amount of points become higher, the percentage of placed labels will become lower. This is normal as the labels have the same height and the same width for the same type of distribution but with a higher amount of points. The reason why bounded cases have low solution is because all points are placed in a small area.\\
+Other than running time, we also look at the amount of placed labels of our algorithm. As we can see from figure ..., when the amount of points are small, the algorithm gives solutions with high percentage of placed labels. When the amount of points become higher, the percentage of placed labels will become lower. This is normal as the labels have the same height and the same width for the same type of distribution but with a higher amount of points. The reason why bounded cases have low solution is because all points are placed in a small area.\\
 
 \subsection{4-position}
 \subsubsection{Results}
