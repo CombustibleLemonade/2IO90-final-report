@@ -52,11 +52,7 @@ In this section we will describe the algorithms we use for each of the placement
 All our algorithms use a quadtree to quickly find all points in an interval. This will be described first. Furthermore, the algorithms for the 2pos model and the 4pos model are very similar, these will be discussed together. After that, we will describe the algorithm for the 1slider model.
 
 \subsection{Quadtree}
-<<<<<<< HEAD
-Since advanced label-placing algorithms have a tendency of requesting information about what labels exist in a certain area, a quadtree can help speed up those algorithms. A quadtree has four children per node and each node of the tree stores information about a certain square-shaped area it patrols. All labels stored in a node have their origin point in the area of that node. Furthermore, the four child nodes are the subdivision of its parent node. This means that nodes in a certain area can be easily found by traversing the tree.\\
 
-Here we will show how a quadtree can be used to find labels in a certain area.
-=======
 Since advanced label-placing algorithms have a tendency of requesting information about what labels exist in a certain area, a quadtree can help speed up those algorithms. A quadtree is defined as a tree, with a node having four children recursively. Each node of the tree stores information about a certain square-shaped area it bounds, including an array of points which have their location in the area of that node. Nodes which contain points are leaves of the tree. The four child nodes are the subdivision of its parent node. This means that nodes in a certain area can be easily found by traversing the tree.\\
 Since every point is distinct, and there are only $10000 * 10000$ possible placements, we can reasonably assume the tree is balanced.\\
 \begin{algorithm}[H]
@@ -79,9 +75,9 @@ Since every point is distinct, and there are only $10000 * 10000$ possible place
 \end{algorithmic}
 \end{algorithm}
 In a balanced quadtree the maximum depth is in $O(\log{n})$, which means our algorithm also runs in $O(\log{n}))$
->>>>>>> origin/master
 
-Here I will show how a quadtree can be used to find labels in a certain area.\\
+
+Here we will show how a quadtree can be used to find labels in a certain area.\\
 \begin{algorithm}[H]
 \caption{Find labels in an area}
 \begin{algorithmic}[1]
@@ -278,4 +274,7 @@ Initializing the quadtree simply adds every point in the input to the quadtree. 
 Now the algorithm enters the loop. This loop is repeated until the heap is empty, a solution which places labels on all of the points is found, or four and a half minutes have passed. It is nearly impossible to predict when our algorithm will find a solution which places labels on all of the points, so we will not consider this in the running time. Therefore, the total running time of the loop will be the minimum of the time it takes to empty the heap and 4.5 minutes. Firstly, we will determine the time it takes to empty the heap. At the first iteration, the heap contains $n$ points. At the end of each iteration, one point is removed from the heap. Therefore, the loop is repeated $n$ times. Inside the loop, the running time depends on the running time of assinging the collisions, applying L1, applying L2, and executing the greedy part. Most of these steps only use the points which have not been discarded. We will denote this remaining amount of points with $k$. \\ The L1 algorithm checks for every point whether the $bounding \ box$ of that point has enough space in between $x_1$ and $x_2$, and then has the possibility to place a label. These operations take constant time, so the total time it takes to apply L1 is $\Theta(k)$. \\
 The L2 algorithm finds all points of which the $bounding \ box$ has only one collision. In the worst case, all of the $bounding \ boxes$ have this, and the algorithm needs to place labels on all of the points. Checking points takes $\Theta(k)$ time. We only do constant time operations every check, so the total time for L2 is $\Theta(k)$. \\
 The greedy part will first execute on the points which have not been discarded and then again for all of the discarded points. This means that combined, it will execute on $n$ points every iteration.  
+\\
+So, we execute a loop $n$ times, in which the running times depend on a variable $k$ which runs down from $n$ to 1. The highest rate of growth in the loop is $k^2$. This gives a summation like $\sum_{k=0}^n \Theta(k^2)$, which is equal to $\Theta(n^3)$. We also have a part which takes $\Theta(n^2)$. Repeating this $n$ times gives a running time of $\Theta(n^3)$.
+The total running time of the complete 1slider algorithm will therefore be $\Theta(n^3) + \Theta(n^3) = \Theta(n^3)$.
 \end{document} 
