@@ -56,7 +56,7 @@ We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with
     \item V Clustered. Points are placed around $10$ randomly chosen $x$-coordinates.
     \item Bounded. Points are randomly placed on a $1000$ by $1000$ plane.
 \end{enumerate}
-We have $500$ test cases in total, $100$ of each different distribution.
+We have $500$ test cases in total, $100$ of each different distribution with $5$ different label sizes. The label sizes are, $100$ by $100$, $100$ by $500$, $500$ by $100$, $1000$ by $1000$ and $5000$ by $5000$.
 
 \subsection{2-position}
 \subsubsection{Results}
@@ -72,20 +72,19 @@ The running time of the 2-position algorithm can be seen in the following figure
 \begin{figure}[h!]
  \centering
   \includegraphics[scale = 0.5]{2PosRunningTime.png}\\
-  \caption{A graphic showing the percentage of labels placed by the 4-position algorithm}
+  \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
  \end{figure}
 
 The following graph shows the percentage of label placed by 2-position algorithm. It also shows five different types of distribution.
 \begin{figure}[h!]
  \centering
   \includegraphics[scale = 0.5]{2PosLabelsPlaced.png}\\
-  \caption{A graphic showing the percentage of labels placed by the 4-position algorithm}
+  \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
  \end{figure}
 \subsubsection{Discussion}
-As we explained in the previous section the theoretical running time of the 2-position algorithm is $\Theta(n^2)$. In figure ..., it shows the running time of the different test cases. In most cases the running time is quite low and close to the minimal running time. This is because the amount of collisions of the candidates is low, so it will not take much time to map the collisions and it will take less time to place the labels. There are some cases that have higher running time than the others. And we can see from the figure that the practical worst case running time are close to the theoretical running time $\Theta(n^2)$ as we explained before. \\
-You can also find out the worst cases of each distribution suddenly drops when the number of points reaches a specific amount. That's because in these cases, there are too many collisions. If we use the regular algorithm, the running time will become really high so it's not efficient. So in that case, we use greedy algorithm to place the labels. The running time will become lower and the solution is as optimal when using the regular algorithm since there are a lot of collisions.\\
-Other than running time, we also look at the results of our algorithm. As we can see from figure $3$, when the amount of points are small, the algorithm gives nice solutions with high percentage of placed labels. When the amount of points become higher, the percentage of placed labels will become lower. This is pretty normal since the labels have the same height and the same width for the same type of distribution but with different amount of points. Even in the cases with $10000$ points, we still have more than $50\%$ label placement. \\
-As this algorithm is considered very efficient and gives optimal results, we consider this algorithm as the optimal solution for this problem.
+As we explained in the previous section the theoretical running time of the 2-position algorithm is $O(n^2)$. In figure ..., it shows the running time of the different test cases. In most cases the running time is quite low and close to the minimal running time. This is because the amount of collisions of the candidates is low, so it will not take much time to map the collisions and it will take less time to place the labels. There are some cases that have higher running time than the others. And we can see from the figure that the practical worst case running time are close to the theoretical running time $O(n^2)$ as we explained before. \\
+The running time of the worst cases of each distribution suddenly drops when the number of points reaches a specific amount. This is because in these cases, there are too many collisions. If we use the regular algorithm, the running time will become really high so it's not efficient. So in that case, we use a greedy algorithm to place the labels.\\
+Other than running time, we also look at the amount of labels placed by our algorithm. As we can see from figure ..., when the amount of points are small, the algorithm gives a solution with a high percentage of placed labels. When the amount of points become higher, the percentage of placed labels becomes lower. This is pretty normal since the labels have the same height and the same width for the same type of distribution but with different amount of points.\\
 
 \subsection{4-position}
 \subsubsection{Results}
