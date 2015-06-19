@@ -59,17 +59,23 @@ We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with
 
 \subsection{2-position}
 \subsubsection{Results}
-The algorithm of 2-position model has been explained in the previous section. As a recap, this algorithm has two phase: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. For the experimental evaluation of the 2-position algorithm we use $2500$ different test cases with $500$ cases for each distribution.
+The algorithm of 2-position model has been explained in the previous section. As a recap, this algorithm has two phase: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. For the experimental evaluation of the 2-position algorithm we use $2500$ different test cases with $500$ cases for each distribution. We can show you a example of our results. You can see from figure ..., the solution is quite optimal, we have tried to place as many labels as we can.(Red points mean there are no labels can be placed). 
 
 \begin{figure}[h!]
  \centering
-  \includegraphics[scale = 0.5]{2PosRunningTime.png}\\
+  \centerline{\includegraphics[scale = 0.5]{2pos_example.JPG}}
+  \caption{A example of label placement of 2-position model}
+ \end{figure} 
+
+\begin{figure}[h!]
+ \centering
+  \centerline{\includegraphics[scale = 0.6]{2PosRunningTime.png}}
   \caption{A graphic showing the running time of the 2-position algorithm}
  \end{figure}
 
 \begin{figure}[h!]
  \centering
-  \includegraphics[scale = 0.5]{2PosLabelsPlaced.png}\\
+  \centerline{\includegraphics[scale = 0.6]{2PosLabelsPlaced.png}}
   \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
  \end{figure}
 \subsubsection{Discussion}
@@ -79,19 +85,29 @@ Other than running time, we also look at the amount of placed labels of our algo
 
 \subsection{4-position}
 \subsubsection{Results}
+The algorithm of 4-position model is basically the same as the algorithm of 2-position except it can place two more labels. For the experimental evaluation of the 4-position algorithm we also use $2500$ different test cases with $500$ cases for each distribution. We can also show you an example of our results for 4-position model. You can see from figure ..., the solution is quite optimal, we have tried to place as many labels as we can.(Red points mean there are no labels can be placed).
+
+\begin{figure}[h!]
+ \centering
+  \centerline{\includegraphics[scale = 0.5]{4pos_example.JPG}}
+  \caption{A example of label placement of 4-position model}
+ \end{figure}
 
  \begin{figure}[h!]
  \centering
- \includegraphics[scale = 0.65]{4PosRunningTime.png}\\
+ \centerline{\includegraphics[scale = 0.6]{4PosRunningTime.png}}
  \caption{A graphic showing the Running Time of the 4-position algorithm}
  \end{figure}
 
  \begin{figure}[h!]
  \centering
-  \includegraphics[scale = 0.65]{4PosLabelsPlaced.png}\\
+  \centerline{\includegraphics[scale = 0.6]{4PosLabelsPlaced.png}}
   \caption{A graphic showing the percentage of labels placed by the 4-position algorithm}
  \end{figure}
 \subsubsection{Discussion}
+As we said, the algorithm of 4-position model is nearly the same as the algorithm of 2-position model. Hence the theoretical running time of the 4-position algorithm is also $O(n^2)$. In figure ..., it shows the running time of $2500$ different cases. You can see most of the cases are quite low in the running time and also close to their best cases. This is because the amount of collisions of the candidates is small, so it will not take much time to map the collisions and it will take less time to place the labels. This also happened in our 2-position algorithm. There are some cases that have higher running time than the others. And we can see from the figure that the practical worst case running time are close to the theoretical running time $O(n^2)$. \\
+You can see the worst cases of each distribution suddenly drop when the number of points reaches a specific amount as well. This is because in these cases, there are too many collisions. Like in the 2-position algorithm, we use greedy algorithm to place the labels. But there are still some differences between 2-position model and 4-position model. In 4-position algorithm, the worst case running time drop faster than in 2-position algorithm. That's because in 4-position model, there are much more collisions occur between the candidates of labels since it has four labels to place while 2-position only has two.\\
+Other than running time, we also look at the amount of placed labels of our algorithm. As we can see from figure ..., when the amount of points are small, the algorithm gives solutions with high percentage of placed labels. When the amount of points become higher, the percentage of placed labels will become lower. This can be explained by the same situation in 2-position model. Compared to the result of 2-position algorithm, 4-position algorithm has higher solution in the percentage of placed labels since it has two more labels to place.\\
 
 \subsection{1-slider}
 \subsubsection{Results}
