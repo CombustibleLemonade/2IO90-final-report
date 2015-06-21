@@ -59,18 +59,19 @@ We ran all the tests in our experimental evaluation on a HP EliteBook 8570w with
 
 \subsection{2-position}
 \subsubsection{Results}
-The algorithm for the 2-position model is explained in detail in section 2.2. As a short recap, this algorithm has two phases: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. For the experimental evaluation of the 2-position algorithm we used $2500$ different test cases with $500$ cases for each distribution. These test cases start with 100 points and increase with 100 points until 10000 points are reached. \\
+The algorithm for the 2-position model is explained in detail in section 2.2. As a short recap, this algorithm has two phases: first we map all the collisions of every candidates of every single point, then we try to place the candidates that has least amount of collisions. An example of the 2-position model can be found in figure 1.\\
+For the experimental evaluation of the 2-position algorithm we used $2500$ different test cases with $500$ cases for each distribution. These test cases start with 100 points and increase with 100 points until 10000 points are reached. The running times of the test cases can be found in figure ... and the percentage of points it could label can be found in figure ...\\
 
 \begin{figure}[H]
  \centering
   \centerline{\includegraphics[scale = 0.5]{2PosRunningTime.png}}
-  \caption{A graphic showing the running time of the 2-position algorithm}
+  \caption{The running time of the 2-position algorithm}
  \end{figure}
 
 \begin{figure}[H]
  \centering
   \centerline{\includegraphics[scale = 0.5]{2PosLabelsPlaced.png}}
-  \caption{A graphic showing the percentage of labels placed by the 2-position algorithm}
+  \caption{The percentage of labels placed by the 2-position algorithm}
  \end{figure}
 
 \subsubsection{Discussion}
@@ -81,18 +82,19 @@ Other than running time, we also look at the amount of placed labels of our algo
 
 \subsection{4-position}
 \subsubsection{Results}
-The algorithm of 4-position model is explained in detail in section 2.2 It is basically the same as the algorithm of 2-position except it has two more possible label candidates. For the experimental evaluation of the 4-position algorithm we also used $2500$ different test cases with $500$ cases for each distribution. These test cases start with 100 points and increase with 100 points until 10000 points are reached.\\
+The algorithm of 4-position model is explained in detail in section 2.2. It is similar to the algorithm for the 2-position model except it has two more possible label candidates. An example of the 4-position model can be seen in figure 1.\\
+ For the experimental evaluation of the 4-position algorithm we also used $2500$ different test cases with $500$ cases for each distribution. These test cases start with 100 points and increase with 100 points until 10000 points are reached. The running times of the test cases can be found in figure ... and the percentage of points it could label can be found in figure ...\\
 
  \begin{figure}[H]
  \centering
  \centerline{\includegraphics[scale = 0.5]{4PosRunningTime.png}}
- \caption{A graphic showing the Running Time of the 4-position algorithm}
+ \caption{The Running Time of the 4-position algorithm}
  \end{figure}
 
  \begin{figure}[H]
  \centering
   \centerline{\includegraphics[scale = 0.5]{4PosLabelsPlaced.png}}
-  \caption{A graphic showing the percentage of labels placed by the 4-position algorithm}
+  \caption{The percentage of labels placed by the 4-position algorithm}
  \end{figure}
 
 \subsubsection{Discussion}
@@ -103,22 +105,23 @@ Other than running time, we also look at the amount of placed labels of our algo
 
 \subsection{1-slider}
 \subsubsection{Results}
-For the evaluation of the 1-slider algorithm we ran 500 test cases, 100 of each distribution. These test cases start with 500 points and increase with 500 points until 10000 points is reached. The 1-slider algorithm is explained in detail in section 2.3
+For the evaluation of the 1-slider algorithm we ran 500 test cases, 100 of each distribution. These test cases start with 500 points and increase with 500 points until 10000 points is reached. The 1-slider algorithm is explained in detail in section 2.3. An example of the 1-slider model can be found in figure 1.\\
+ The running times of the test cases can be found in figure ... and the percentage of points it could label can be found in figure ...
 
  \begin{figure}[H]
  \centering
  \centerline{\includegraphics[scale = 0.65]{1slider.png}}
- \caption{A graphic showing the Running Time of the 1-slider algorithm}
+ \caption{The running time of the 1-slider algorithm}
  \end{figure}
 
  \begin{figure}[H]
  \centering
   \centerline{\includegraphics[scale = 0.65]{1sliderplaced.png}}
-  \caption{A graphic showing the percentage of labels placed by the 1-slider algorithm}
+  \caption{The percentage of labels placed by the 1-slider algorithm}
  \end{figure}
 
 \subsubsection{Discussion}
-From section 2.3.9 we get that the theoretical running time of the 1-slider algorithm is $\theta(n^3)$. From figure ... we can see that the practical running time of the 500 test cases matches the theoretical running time. The figure also shows that the running time of all the test cases plateaus after a certain amount of points is reached. This is because after 4.5 minutes has been reached we stop the algorithm and report the best solution found up to then.\\
+From section 2.3.9 we get that the theoretical running time of the 1-slider algorithm is $\theta(n^3)$. From figure ... we can see that the practical running time of the 500 test cases matches the theoretical running time. The figure also shows that the running time of all the test cases plateaus after a certain amount of points is reached. This is because after 4.5 minutes has been reached we stop the algorithm and report the best solution found up to then. From testing we found that ending the algorithm after 4.5 minutes left enough time for the algorithm to terminate and return the solution it had found such that it did not run longer than 5 minutes.\\
 In figure ... we can see the percentage of points that have a label. As usual the amount of points that could be labeled decreases as the amount of points increases with the bounded test cases being effected the most. When we compare the results to the 2-position algorithm we see that the 1-slider manages to place slightly more labels. However, when we compare the 1-slider to the 4-position we can see that it manages to place considerably less labels.
 
 \end{document}
