@@ -49,7 +49,7 @@
 \begin{document}
 \section{The Algorithms}
 In this section we will describe the algorithms we use for each of the placement models.\\
-All our algorithms use a quadtree to quickly find all points in an interval. This will be described first. Furthermore, the algorithms for the 2pos model and the 4pos model are very similar, these will be discussed together. Finally, we will describe the algorithm for the 1slider model.
+All our algorithms use a quadtree to quickly find all points in an interval. This will be described first. Then the 2pos and 4pos algorithm will be described together since they are very similar. Finally, we will describe the algorithm for the 1slider model.
 
 \subsection{Quadtree}
 
@@ -104,15 +104,15 @@ Here we will show how a quadtree can be used to find points in a certain area.\\
 When dealing with a balanced quadtree with $n$ points, the worst-case running time is $O(n)$, which is when the PointsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and there are $n$ points, therefore the running time is in $O(n)$.
 
 \subsection{2-position model and 4-position model}
-For the 2-position model and the 4-position model we use a very simple approach. We will first explain our algorithm and derive its theoretical worst-case running time. Then we will prove that it does not place overlapping labels. After that we will talk about how this approach applies the rules L1, L2 and L3 (from Automated Label Placement in Theory and Practice, by Alexander Wolff) correctly.
+For the 2-position model and the 4-position model we use a simple approach. We will first explain our algorithm and derive its theoretical worst-case running time. Then we will prove that it does not place overlapping labels. In the literature we have found three rules (L1, L2 and L3) [1]. We will describe these rules and show how our algorithm correctly applies L1 and L3. Unfortunately, we learned our algorithm does not apply L2 correctly. We will explain this and provide a possible solution for this.
 
 \subsubsection{Description of the algorithm}
-Our algorithm is simple but also very efficient. It has two phases:
+Our algorithm is simple, it has two phases:
 \begin{enumerate}
 \item \textbf{Phase 1: Mapping the collisions}\\
-It checks for every candidate (a candidate is a possible placement of a label for a point) with which candidates it intersects. For each candidate, we store every candidate it collides with in an arraylist, the so-called CollisionList of a candidate. We find these collisions using the quad tree. When we have these collisions, we store all candidates in a MinHeap. The nodes are the candidates and the keys are their number of collisions (plus 0.25 times the number of candidates its point has). Using this data structure is very useful later on, when we want to extract the minimum very often and change keys of nodes even more frequently.
+It checks for every candidate (a candidate is a possible placement of a label for a point) with which candidates it intersects. For each candidate, we store every candidate it collides with in an arraylist, the so-called CollisionList of a candidate. We find these collisions using the quad tree. When we have these collisions, we store all candidates in a minheap. The nodes are the candidates and the keys are their number of collisions plus 0.25 times the number of candidates its point has (necessary for L3 as you will see). Using a minheap is very useful later on, when we want to extract the minimum very often and change keys of nodes even more frequently.
 \item \textbf{Phase 2: Placing candidates}\\
-It may be shocking how easy our actual approach is: we find the candidate with the least amount of collisions (with the MinHeap) and we place it. We place a candidate using the Place function. This function takes a candidate $c$ as argument. It will do the following: It will eliminate all the candidates of the point of which $c$ is a candidate and it will also eliminate all the candidates that $c$ collides with (every candidate in $c$'s CollisionList). This eliminating will be done using an Eliminate function. This function takes a candidate $c$ as argument and it will remove $c$ from all the CollisionLists for all candidates $c^*$ in the CollisionList of $c$. It will also remove $c$ from the MinHeap. In this way, later on will not have to look after candidates that are already placed or are eliminated. 
+Our actual placement strategy is simple: we find the candidate with the least amount of collisions (with the minheap) and we place it. We place a candidate using a so-called Place function. This function takes a candidate $c$ as argument. It will do the following: It will eliminate all the candidates of the point of which $c$ is a candidate and it will also eliminate all the candidates that $c$ collides with (every candidate in $c$'s CollisionList). This eliminating will be done using an Eliminate function. This function takes a candidate $c$ as argument and it will remove $c$ from all the CollisionLists for all candidates $c^*$ in the CollisionList of $c$. It will also remove $c$ from the minheap. In this way, later on will not have to look after candidates that are already placed or are eliminated. 
 \end{enumerate}
 Below you can see the pseudo-code for our algorithm and its running time.
 
@@ -123,7 +123,7 @@ Below you can see the pseudo-code for our algorithm and its running time.
 \State Initialize the solution $S$ to the empty set
 \State Insert all points in the quad tree $q$
 \State Give points their candidates
-\For{$c\in$Candidates}\Comment{For each point we will find its collisions}
+\ForAll{$c\in$Candidates}\Comment{For each point we will find its collisions}
 \State $c.CollisionList\gets$ GiveCollisions($c$)
 \EndFor
 \State Create a MinHeap $h$ containing all the candidates
@@ -136,7 +136,7 @@ Below you can see the pseudo-code for our algorithm and its running time.
 \end{algorithmic}
 \end{algorithm}
 \textbf{Running time}\\
-Line 2 obviously takes $\Theta(1)$. The third line will take $\Theta(n\log n)$ since it inserts (insertion takes $\Theta(\log n)$) $n$ points. For the fouth line it has to give $n$ points $k$ candidates. Giving a point a candidate takes $\Theta(1)$. In the case of the 4-position and the 2-position model, $k$ equals 4 and 2 respectively. So this line will take $\Theta(n)$. Now there is the for-loop. This loops over all $\Theta(n)$ candidates and gives it its collisions. The latter takes $O(n)$ since it uses PointsInArea. Now we create a minheap. Creating a heap takes $\Theta(n)$. After that, there is a while-loop. Inside this while-loop we place candidates untill the heap is empty. Placing candidates has running time in the order of the number of eliminations. Every candidate can only be eliminated once and the elimination takes $O(n)$ time. Concluding, the whole algorithm takes $\Theta(1)+\Theta(n\log n)+\Theta(n)+\Theta(n)*O(n)+\Theta(n)+\Theta(n)*O(n)=O(n^2)$.
+Line 2 takes constant time. Line 3 will take $O(n\log n)$ since it inserts (insertion takes $O(\log n)$) $n$ points. Line 4 has to give $n$ points $k$ candidates. Giving a point a candidate takes $\Theta(1)$. In the case of the 4-position and the 2-position model, $k$ equals 4 and 2 respectively. So this line will take $\Theta(n)$. Now there is the for-loop. This loops over all $\Theta(n)$ candidates and gives it its collisions. The latter takes $O(n)$ since it uses PointsInArea. Now we create a minheap. Creating a heap takes $\Theta(n)$. After that, there is a while-loop. Inside this while-loop we place candidates untill the heap is empty. Placing candidates has running time in the order of the number of eliminations. Every candidate can only be eliminated once and the elimination takes $O(n)$ time. Concluding, the whole algorithm takes $O(1)+O(n\log n)+\Theta(n)+\Theta(n)*O(n)+\Theta(n)+\Theta(n)*O(n)=O(n^2)$.
 
 \subsubsection{Proof of no overlapping labels}
 We will prove the correctness (no intersections) of this algorithm using a loop invariant over the while-loop in the main algorithm:
@@ -150,7 +150,7 @@ We will prove the correctness (no intersections) of this algorithm using a loop 
 \textbf{Termination:} When the loop is finished, our loop invariant proves that there are no intersecting candidates in $S$.
 
 \subsubsection{Correctly applying the rules}
-Our algorithm may look too simple, but in its simplicity lies its elegance. We wanted an algorithm that could place labels efficiently in unclustered areas (using the rules) and also could give a reasonably good solution for clustered areas. This both is done by this very simple approach. Below we will show how our algorithm applies these rules.\\
+Our algorithm may look too simple, but in its simplicity lies its elegance. We wanted an algorithm that could place labels efficiently in unclustered areas (using the rules) and also would give a reasonably good solution for clustered areas. This both is done by this very simple approach. Below we will show how our algorithm applies rule L1 and L3 and we will give a possible extension of the algorithm such that it also applies L2 correctly.\\
 \\
 \textbf{Rule L1}\\
 L1 applies if some point $p$ has a candidate $p_i$ without any overlaps. We simply place $p_i$ and eliminate all other candidates of $p$.\\
@@ -162,7 +162,7 @@ L2 applies if some point $p$ has a candidate $p_i$ that only overlaps some candi
 candidate $q_j$ ($j \neq k$) that is only overlapped by a candidate $p_l$ of $p$ ($l \neq i$). Then $p_i$
 and $q_j$ should be added to the solution and all other candidates of $p$ and $q$ should be eliminated.\\
 \\
-Unfortunately, we found out that our algorithm does not apply L2 correctly in every possible case: suppose L2 applies for two points $p$ and $q$ and futhermore a candidate $q_k$ of $q$ only collides with a candidate $p_i$ of $p$ and $p$ has another candidate $p_l$ ($l\neq i$) which has more than one collision. Then $p_i$, $q_j$ and $q_k$ all have one collision and their points have two candidates. Their keys are thus equal. In this case there is no guarantee that our algorithm does not place $q_k$, eliminating $p_i$, $q_j$ and $q_k$. If this occurs, another label could be placed instead of $p_l$ and thus not labeling $p$, disobeying L2. A quick fix for this problem would be to check whether we are not disobeying L2 everytime we want to place a candidate with one collision. The worst case complexity would not change with this fix. Note that this fix would only improve the algorithm in very, very specific scenario's.\\
+Unfortunately, we found out that our algorithm does not apply L2 correctly in every possible case: suppose L2 applies for two points $p$ and $q$ and futhermore a candidate $q_k$ of $q$ only collides with a candidate $p_i$ of $p$ and $p$ has another candidate $p_l$ ($l\neq i$) which has more than one collision. Then $p_i$, $q_j$ and $q_k$ all have one collision and their points have two candidates. Their keys are thus equal. In this case there is no guarantee that our algorithm does not place $q_k$, eliminating $p_i$, $q_j$ and $q_k$. If this occurs, another label could be placed instead of $p_l$ and thus not labeling $p$, disobeying L2. A quick fix for this problem would be to check whether we are not disobeying L2 everytime we want to place a candidate with one collision. The worst case complexity would not change with this fix since we only would have to check a constant number of candidates every time we want to place a candidate with one collision.\\
 \\
 \textbf{Rule L3}\\
 L3 applies if some point $p$ only has one candidate $p_i$ left and all candidates that intersect with $p$ form a clique. If this is the case, we place $p_i$ and eliminate all its collisions.\\
