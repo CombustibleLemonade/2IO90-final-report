@@ -49,7 +49,7 @@
 \begin{document}
 \section{The Algorithms}
 In this section we will describe the algorithms we use for each of the placement models.\\
-All our algorithms use a quadtree to quickly find all points in an interval. This will be described first. Then the 2pos and 4pos algorithm will be described together since they are very similar. Finally, we will describe the algorithm for the 1slider model.
+All our algorithms use a quadtree to quickly find all points in an interval. This will be described first. Furthermore, the algorithms for the 2pos model and the 4pos model are very similar, these will be discussed together. Finally, we will describe the algorithm for the 1slider model.
 
 \subsection{Quadtree}
 
@@ -104,15 +104,15 @@ Here we will show how a quadtree can be used to find points in a certain area.\\
 When dealing with a balanced quadtree with $n$ points, the worst-case running time is $O(n)$, which is when the PointsInArea method returns all labels. In the worst case scenario, the tree would be traversed for every node. Since we assumed the quadtree to be balanced, there are $O(n)$ nodes, and there are $n$ points, therefore the running time is in $O(n)$.
 
 \subsection{2-position model and 4-position model}
-For the 2-position model and the 4-position model we use a simple approach. We will first explain our algorithm and derive its theoretical worst-case running time. Then we will prove that it does not place overlapping labels. In the literature we have found three rules (L1, L2 and L3) [1]. We will describe these rules and show how our algorithm correctly applies L1 and L3. Unfortunately, we learned our algorithm does not apply L2 correctly. We will explain this and provide a possible solution for this.
+For the 2-position model and the 4-position model we use a very simple approach. We will first explain our algorithm and derive its theoretical worst-case running time. Then we will prove that it does not place overlapping labels. After that we will talk about how this approach applies the rules L1, L2 and L3 (from Automated Label Placement in Theory and Practice, by Alexander Wolff) correctly.
 
 \subsubsection{Description of the algorithm}
-Our algorithm is simple, it has two phases:
+Our algorithm is simple but also very efficient. It has two phases:
 \begin{enumerate}
 \item \textbf{Phase 1: Mapping the collisions}\\
-It checks for every candidate (a candidate is a possible placement of a label for a point) with which candidates it intersects. For each candidate, we store every candidate it collides with in an arraylist, the so-called CollisionList of a candidate. We find these collisions using the quad tree. When we have these collisions, we store all candidates in a minheap. The nodes are the candidates and the keys are their number of collisions plus 0.25 times the number of candidates its point has (necessary for L3 as you will see). Using a minheap is very useful later on, when we want to extract the minimum very often and change keys of nodes even more frequently.
+It checks for every candidate (a candidate is a possible placement of a label for a point) with which candidates it intersects. For each candidate, we store every candidate it collides with in an arraylist, the so-called CollisionList of a candidate. We find these collisions using the quad tree. When we have these collisions, we store all candidates in a MinHeap. The nodes are the candidates and the keys are their number of collisions (plus 0.25 times the number of candidates its point has). Using this data structure is very useful later on, when we want to extract the minimum very often and change keys of nodes even more frequently.
 \item \textbf{Phase 2: Placing candidates}\\
-Our actual placement strategy is simple: we find the candidate with the least amount of collisions (with the minheap) and we place it. We place a candidate using a so-called Place function. This function takes a candidate $c$ as argument. It will do the following: It will eliminate all the candidates of the point of which $c$ is a candidate and it will also eliminate all the candidates that $c$ collides with (every candidate in $c$'s CollisionList). This eliminating will be done using an Eliminate function. This function takes a candidate $c$ as argument and it will remove $c$ from all the CollisionLists for all candidates $c^*$ in the CollisionList of $c$. It will also remove $c$ from the minheap. In this way, later on will not have to look after candidates that are already placed or are eliminated. 
+It may be shocking how easy our actual approach is: we find the candidate with the least amount of collisions (with the MinHeap) and we place it. We place a candidate using the Place function. This function takes a candidate $c$ as argument. It will do the following: It will eliminate all the candidates of the point of which $c$ is a candidate and it will also eliminate all the candidates that $c$ collides with (every candidate in $c$'s CollisionList). This eliminating will be done using an Eliminate function. This function takes a candidate $c$ as argument and it will remove $c$ from all the CollisionLists for all candidates $c^*$ in the CollisionList of $c$. It will also remove $c$ from the MinHeap. In this way, later on will not have to look after candidates that are already placed or are eliminated. 
 \end{enumerate}
 Below you can see the pseudo-code for our algorithm and its running time.
 
@@ -123,7 +123,7 @@ Below you can see the pseudo-code for our algorithm and its running time.
 \State Initialize the solution $S$ to the empty set
 \State Insert all points in the quad tree $q$
 \State Give points their candidates
-\ForAll{$c\in$Candidates}\Comment{For each point we will find its collisions}
+\For{$c\in$Candidates}\Comment{For each point we will find its collisions}
 \State $c.CollisionList\gets$ GiveCollisions($c$)
 \EndFor
 \State Create a MinHeap $h$ containing all the candidates
@@ -136,7 +136,7 @@ Below you can see the pseudo-code for our algorithm and its running time.
 \end{algorithmic}
 \end{algorithm}
 \textbf{Running time}\\
-Line 2 takes constant time. Line 3 will take $O(n\log n)$ since it inserts (insertion takes $O(\log n)$) $n$ points. Line 4 has to give $n$ points $k$ candidates. Giving a point a candidate takes $\Theta(1)$. In the case of the 4-position and the 2-position model, $k$ equals 4 and 2 respectively. So this line will take $\Theta(n)$. Now there is the for-loop. This loops over all $\Theta(n)$ candidates and gives it its collisions. The latter takes $O(n)$ since it uses PointsInArea. Now we create a minheap. Creating a heap takes $\Theta(n)$. After that, there is a while-loop. Inside this while-loop we place candidates untill the heap is empty. Placing candidates has running time in the order of the number of eliminations. Every candidate can only be eliminated once and the elimination takes $O(n)$ time. Concluding, the whole algorithm takes $O(1)+O(n\log n)+\Theta(n)+\Theta(n)*O(n)+\Theta(n)+\Theta(n)*O(n)=O(n^2)$.
+Line 2 obviously takes $\Theta(1)$. The third line will take $\Theta(n\log n)$ since it inserts (insertion takes $\Theta(\log n)$) $n$ points. For the fouth line it has to give $n$ points $k$ candidates. Giving a point a candidate takes $\Theta(1)$. In the case of the 4-position and the 2-position model, $k$ equals 4 and 2 respectively. So this line will take $\Theta(n)$. Now there is the for-loop. This loops over all $\Theta(n)$ candidates and gives it its collisions. The latter takes $O(n)$ since it uses PointsInArea. Now we create a minheap. Creating a heap takes $\Theta(n)$. After that, there is a while-loop. Inside this while-loop we place candidates untill the heap is empty. Placing candidates has running time in the order of the number of eliminations. Every candidate can only be eliminated once and the elimination takes $O(n)$ time. Concluding, the whole algorithm takes $\Theta(1)+\Theta(n\log n)+\Theta(n)+\Theta(n)*O(n)+\Theta(n)+\Theta(n)*O(n)=O(n^2)$.
 
 \subsubsection{Proof of no overlapping labels}
 We will prove the correctness (no intersections) of this algorithm using a loop invariant over the while-loop in the main algorithm:
@@ -150,7 +150,7 @@ We will prove the correctness (no intersections) of this algorithm using a loop 
 \textbf{Termination:} When the loop is finished, our loop invariant proves that there are no intersecting candidates in $S$.
 
 \subsubsection{Correctly applying the rules}
-Our algorithm may look too simple, but in its simplicity lies its elegance. We wanted an algorithm that could place labels efficiently in unclustered areas (using the rules) and also would give a reasonably good solution for clustered areas. This both is done by this very simple approach. Below we will show how our algorithm applies rule L1 and L3 and we will give a possible extension of the algorithm such that it also applies L2 correctly.\\
+Our algorithm may look too simple, but in its simplicity lies its elegance. We wanted an algorithm that could place labels efficiently in unclustered areas (using the rules) and also could give a reasonably good solution for clustered areas. This both is done by this very simple approach. Below we will show how our algorithm applies these rules.\\
 \\
 \textbf{Rule L1}\\
 L1 applies if some point $p$ has a candidate $p_i$ without any overlaps. We simply place $p_i$ and eliminate all other candidates of $p$.\\
@@ -162,7 +162,7 @@ L2 applies if some point $p$ has a candidate $p_i$ that only overlaps some candi
 candidate $q_j$ ($j \neq k$) that is only overlapped by a candidate $p_l$ of $p$ ($l \neq i$). Then $p_i$
 and $q_j$ should be added to the solution and all other candidates of $p$ and $q$ should be eliminated.\\
 \\
-Unfortunately, we found out that our algorithm does not apply L2 correctly in every possible case: suppose L2 applies for two points $p$ and $q$ and futhermore a candidate $q_k$ of $q$ only collides with a candidate $p_i$ of $p$ and $p$ has another candidate $p_l$ ($l\neq i$) which has more than one collision. Then $p_i$, $q_j$ and $q_k$ all have one collision and their points have two candidates. Their keys are thus equal. In this case there is no guarantee that our algorithm does not place $q_k$, eliminating $p_i$, $q_j$ and $q_k$. If this occurs, another label could be placed instead of $p_l$ and thus not labeling $p$, disobeying L2. A quick fix for this problem would be to check whether we are not disobeying L2 everytime we want to place a candidate with one collision. The worst case complexity would not change with this fix since we only would have to check a constant number of candidates every time we want to place a candidate with one collision.\\
+Unfortunately, we found out that our algorithm does not apply L2 correctly in every possible case: suppose L2 applies for two points $p$ and $q$ and futhermore a candidate $q_k$ of $q$ only collides with a candidate $p_i$ of $p$ and $p$ has another candidate $p_l$ ($l\neq i$) which has more than one collision. Then $p_i$, $q_j$ and $q_k$ all have one collision and their points have two candidates. Their keys are thus equal. In this case there is no guarantee that our algorithm does not place $q_k$, eliminating $p_i$, $q_j$ and $q_k$. If this occurs, another label could be placed instead of $p_l$ and thus not labeling $p$, disobeying L2. A quick fix for this problem would be to check whether we are not disobeying L2 everytime we want to place a candidate with one collision. The worst case complexity would not change with this fix. Note that this fix would only improve the algorithm in very, very specific scenario's.\\
 \\
 \textbf{Rule L3}\\
 L3 applies if some point $p$ only has one candidate $p_i$ left and all candidates that intersect with $p$ form a clique. If this is the case, we place $p_i$ and eliminate all its collisions.\\
@@ -172,37 +172,13 @@ We will prove that if L3 applies for some point $p$ with candidate $p_i$, then $
 \subsection{1-slider algorithm}
 % new stuff about L1:
 \subsubsection{Overview}
+The algorithm we used for the 1-slider model consists of an initialization part and a loop. \\ \\
 \textbf{Initialization}\\
 Firstly, the 1-slider algorithm initializes the variables we need: the $mostfound$ and $bestsolution$ variables, which will keep track of the best solution so far, and the timer. After that, it initializes a quadtree, filling it with all of the points in the input. Then, each of the points will be assigned a so-called $bounding\ box$, which represent all potential label placements. These $bounding \ boxes$ will be given collision values using the $PointsInArea$ function of the quadtree. After this, a maxheap of points is initialized, using the amount of collisions the $bounding \ box$ of the point has with other $bounding \ boxes$ as keys. \\
 \textbf{Loop} \\
-Now the algorithm will enter a loop. In this loop, we find a solution for all of the points which have not been $discarded$. Firstly, we have to re-assign collision values for all of the remaining(not $discarded$) points, again using the $PointsInArea$ function of the quadtree. Secondly, we apply rule L1 and L2, which have been explained earlier. Thirdly, we finish the solution by executing a greedy algorithm on the remaining points and then also on all of the points (including the $discarded$ ones). Now, we check whether the solution we found this iteration is better than the best solution so far. If it is better, we replace the previously best solution with this new solution. Now we delete the point of which the $bounding \ box$ has the most collisions from the heap and mark the corresponding point in the quadtree as $discarded$. This loop is repeated until the heap is empty, we have found a solution which places labels on all of the points, or when four and a half minutes have passed. \\ \\ In the end, we report the best solution found. \\ 
- \begin{algorithm}[H]
-\caption{1slider algorithm}
-\begin{algorithmic}[1]
-\Procedure{OneSlider}{}
-\State mostfound = 0
-\State bestsolution = empty array of points
-\State timer = 0
-\State build quadtree containing all of the points in input
-\State give each point a bounding box
-\State give collisions to all of the bounding boxes on the points
-\State build maxheap of points with number of potential collisions as keys
-\While{heap not empty \textbf{AND} timer $<$ 4.5 min \textbf{AND} mostfound $<$ input points}
-\State give collisions to the bounding boxes of the undiscarded points
-\State try L1 for each unplaced and undiscarded point
-\State try L2 for each unplaced and undiscarded point
-\State do the greedy part for each unplaced and undiscarded point
-\State do the greedy part for all unplaced points (including discarded)
-\If {amount of labels placed this iteration $>$ mostfound}
-\State mostfound = amount of labels placed this iteration
-\State bestsolution = solution found this iteration
-\EndIf
-\State delete root of the heap and mark corresponding point in quadtree as discarded
-\EndWhile
-\State \textbf{return} bestsolution
-\EndProcedure
-\end{algorithmic}
-\end{algorithm} 
+Now the algorithm will enter a loop. In this loop, we find a solution for all of the points which have not been $discarded$. Firstly, we have to re-assign collision values for all of the remaining(not $discarded$) points, again using the $PointsInArea$ function of the quadtree. Secondly, we apply rule L1 and L2, which have been explained earlier. Thirdly, we finish the solution by executing a greedy algorithm on the remaining points and then also on all of the points (including the $discarded$ ones). Now, we check whether the solution we found this iteration is better than the best solution so far. If it is better, we replace the previously best solution with this new solution. Now we delete the point of which the $bounding \ box$ has the most collisions from the heap and mark the corresponding point in the quadtree as $discarded$. This loop is repeated until the heap is empty, we have found a solution which places labels on all of the points, or when four and a half minutes have passed. \\ 
+In the end, we report the best solution found. \\ 
+
 A detailed explanation of all sub-algorithms and concepts is given below. 
 
 \subsubsection{Reason for deleting the point with most collisions}
@@ -232,9 +208,9 @@ After L1 and L2, we complete the solution by executing a greedy part on the rema
 \subsubsection{Running time}
 The running time of this algorithm is dependent on the amount of points $n$ in the input and the total amount of collisions $c$ the $bounding \ boxes$ have. For example, if we find no collisions at all, we have $n$ cases of L1 and the algorithm terminates after the first iteration of the main loop, reporting a solution which places labels on all points. However, for simplicity's sake, we will only give the running time in worst case in terms of $n$. \\ \\
 \textbf{Initialization}\\
-In the following text, line numbers will refer to the pseudocode given earlier. The operations in line 2-4 take $\Theta(1)$ time. Initializing the quadtree in line 5 simply adds every point in the input to the quadtree. Adding a point to the quadtree takes $O(log(n))$ time, so adding every point will take $O(n*log(n))$ time. In line 6, giving each point a bounding box takes $\Theta(n)$ time. In line 7, the time it takes to give collisions to the $bounding \ boxes$ will depend on the amount of points, the size of the labels, and the point distribution. We check  every point, so this gives us a multiplication factor of $n$. When checking every point, we use the function AllPointsInArea of the quadtree. The worst case running time of this function is $O(n)$. The other things we do in this part all depend on how many collisions this function has found, but they take constant time, so the total running time of this part will be $O(n)*O(n)*O(1) = O(n^2)$ worst case. Initializing the heap in line 8 with all of the points takes $O(n)$ time.  \\ \\
+The initialization of the variables we need takes $\Theta(1)$ time. After that, tnitializing the quadtree simply adds every point in the input to the quadtree. Adding a point to the quadtree takes $O(log(n))$ time, so adding every point will take $O(n*log(n))$ time. Now we give each point a bounding box. This takes $\Theta(n)$ time. The time it takes to give collisions to these $bounding \ boxes$ will depend on the amount of points, the size of the labels, and the point distribution. We check  every point, so this gives us a multiplication factor of $n$. When checking every point, we use the function AllPointsInArea of the quadtree. The worst case running time of this function is $O(n)$. The other things we do in this part all depend on how many collisions this function has found, but they take constant time, so the total running time of this part will be $O(n)*O(n)*O(1) = O(n^2)$ worst case. Now, initializing the heap with all of the points takes $O(n)$ time.  \\ \\
  \textbf{The loop} \\
-Now, in lines 9-20, the algorithm is in a loop. This loop is repeated until the heap is empty, a solution which places labels on all of the points is found, or four and a half minutes have passed. It is nearly impossible to predict when our algorithm will find a solution which places labels on all of the points, so we will not consider this in the running time. Therefore, the total running time of the loop will be the minimum of the time it takes to empty the heap and 4.5 minutes. Firstly, we will determine the time it takes to empty the heap. At the first iteration, the heap contains $n$ points. At the end of each iteration, one point is removed from the heap. Therefore, the loop is repeated $n$ times. Inside the loop, the running time depends on the running time of assinging the collisions, applying L1, applying L2, and executing the greedy part. Most of these steps only use the points which have not been discarded. We will denote this remaining amount of points with $k$. \\ The L1 algorithm checks for every point whether the $bounding \ box$ of that point has enough space in between $x_1$ and $x_2$, and then has the possibility to place a label. These operations take constant time, so the total time it takes to apply L1 is $O(k)$. \\
+The algorithm now enters the loop. This loop is repeated until the heap is empty, a solution which places labels on all of the points is found, or four and a half minutes have passed. It is nearly impossible to predict when our algorithm will find a solution which places labels on all of the points, so we will not consider this in the running time. Therefore, the total running time of the loop will be the minimum of the time it takes to empty the heap and 4.5 minutes. Firstly, we will determine the time it takes to empty the heap. At the first iteration, the heap contains $n$ points. At the end of each iteration, one point is removed from the heap. Therefore, the loop is repeated $n$ times. Inside the loop, the running time depends on the running time of assinging the collisions, applying L1, applying L2, and executing the greedy part. Most of these steps only use the points which have not been discarded. We will denote this remaining amount of points with $k$. \\ The L1 algorithm checks for every point whether the $bounding \ box$ of that point has enough space in between $x_1$ and $x_2$, and then has the possibility to place a label. These operations take constant time, so the total time it takes to apply L1 is $O(k)$. \\
 The L2 algorithm finds all points of which the $bounding \ box$ has only one collision. In the worst case, all of the $bounding \ boxes$ have this, and the algorithm needs to place labels on all of the points. Checking points takes $O(k)$ time. We only do constant time operations every check, so the total time for L2 is $O(k)$. \\
 The greedy part will first execute on the points which have not been discarded and then again for all of the discarded points. This means that combined, it will execute on $n$ points every iteration.  
 \\ \\
